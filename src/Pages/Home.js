@@ -13,6 +13,12 @@ import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import NeighborhoodMap from '../components/NeighborhoodMap';
+import {
+  GOOGLE_MAPS_API_KEY,
+  SQUARESPACE_CLIENT_ID,
+  SQUARESPACE_CLIENT_SECRET
+} from '../config';
 
 const drawerWidth = 240;
 
@@ -50,15 +56,28 @@ const styles = theme => ({
 
 class ResponsiveDrawer extends React.Component {
   state = {
-    mobileOpen: false
+    mobileOpen: false,
+    places: []
   };
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  componentDidMount() {
+    fetch(
+      `https://api.foursquare.com/v2/venues/search?ll=40.7,-74&client_id=${SQUARESPACE_CLIENT_ID}&client_secret=${SQUARESPACE_CLIENT_SECRET}&v=20181003`
+    )
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ places: data.response.venues });
+        console.log(data.response.venues[0].location.lat, data.response.venues);
+      });
+  }
+
   render() {
     const { classes, theme } = this.props;
+    const GOOGLE_MAPS_API_SCRIPT = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}`;
 
     const drawer = (
       <div>
@@ -125,36 +144,14 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-            dolor purus non enim praesent elementum facilisis leo vel. Risus at
-            ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-            rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
-            sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-            integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-            eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-            quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-            vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-            donec massa sapien faucibus et molestie ac.
-          </Typography>
-          <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-            ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-            elementum integer enim neque volutpat ac tincidunt. Ornare
-            suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-            volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
-            Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
-            ornare massa eget egestas purus viverra accumsan in. In hendrerit
-            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
-            aliquam sem et tortor. Habitant morbi tristique senectus et.
-            Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean
-            euismod elementum nisi quis eleifend. Commodo viverra maecenas
-            accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
-          </Typography>
+          <NeighborhoodMap
+            markers={this.state.places}
+            isMarkerShown
+            googleMapURL={GOOGLE_MAPS_API_SCRIPT}
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `500px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
         </main>
       </div>
     );
