@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,7 +20,7 @@ import {
   SQUARESPACE_CLIENT_SECRET
 } from '../config';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const styles = theme => ({
   root: {
@@ -84,10 +84,13 @@ class ResponsiveDrawer extends React.Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {['Place 1', 'Place 2', 'Place 3', 'Place 4'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemText primary={text} />
-            </ListItem>
+          {this.state.places.map(place => (
+            <Fragment>
+              <ListItem button key={place.id}>
+                <ListItemText primary={place.name} />
+              </ListItem>
+              <Divider />
+            </Fragment>
           ))}
         </List>
       </div>
