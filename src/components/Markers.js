@@ -13,6 +13,14 @@ export default class Markers extends Component {
       infoIndex: index
     });
 
+  getPlaceId(index) {
+    // console.log(index);
+    this.setState({
+      isOpen: this.state.infoIndex !== index || !this.state.isOpen,
+      infoIndex: index
+    });
+  }
+
   render() {
     return this.props.markers.map(place => {
       return (

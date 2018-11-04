@@ -1,7 +1,6 @@
 import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 import { GOOGLE_MAPS_API_KEY } from '../config';
 import React, { Component } from 'react';
-import Markers from './Markers';
 
 class NeighborhoodMap extends Component {
   state = {
@@ -23,7 +22,7 @@ class NeighborhoodMap extends Component {
           defaultZoom={13}
           defaultCenter={{ lat: 40.70313886114747, lng: -73.9981049029518 }}
         >
-          {this.props.isMarkerShown && <Markers markers={this.props.markers} />}
+          {this.props.isMarkerShown && this.props.children}
         </GoogleMap>
       ))
     );

@@ -15,7 +15,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import NeighborhoodMap from '../components/NeighborhoodMap';
 import { SQUARESPACE_CLIENT_ID, SQUARESPACE_CLIENT_SECRET } from '../config';
-
+import Markers from '../components/Markers';
 const drawerWidth = 270;
 
 const styles = theme => ({
@@ -81,7 +81,12 @@ class ResponsiveDrawer extends React.Component {
         <List>
           {this.state.places.map(place => (
             <Fragment key={place.id}>
-              <ListItem button>
+              <ListItem
+                button
+                onClick={() => {
+                  this.markers.getPlaceId(place.id);
+                }}
+              >
                 <ListItemText primary={place.name} />
               </ListItem>
               <Divider />
@@ -142,7 +147,14 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <NeighborhoodMap markers={this.state.places} isMarkerShown />
+          <NeighborhoodMap isMarkerShown>
+            <Markers
+              markers={this.state.places}
+              ref={instance => {
+                this.markers = instance;
+              }}
+            />
+          </NeighborhoodMap>
         </main>
       </div>
     );
