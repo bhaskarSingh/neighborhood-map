@@ -19,6 +19,7 @@ class NeighborhoodMap extends Component {
     const Map = withScriptjs(
       withGoogleMap(props => (
         <GoogleMap
+          role="application"
           defaultZoom={13}
           defaultCenter={{ lat: 40.70313886114747, lng: -73.9981049029518 }}
         >
