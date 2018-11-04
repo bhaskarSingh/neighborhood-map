@@ -70,7 +70,7 @@ class ResponsiveDrawer extends React.Component {
         console.log(data.response.venues[0].location.lat, data.response.venues);
       })
       .catch(err => {
-        throw new Error('Error Loading places data!');
+        // throw new Error('Error Loading places data!');
       });
   }
 

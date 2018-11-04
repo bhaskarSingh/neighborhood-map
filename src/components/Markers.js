@@ -22,26 +22,28 @@ export default class Markers extends Component {
   }
 
   render() {
-    return this.props.markers.map(place => {
-      return (
-        <Marker
-          onClick={() => {
-            this.showInfo(place.id);
-          }}
-          key={place.id}
-          position={{
-            lat: place.location.lat,
-            lng: place.location.lng
-          }}
-        >
-          {this.state.isOpen &&
-            this.state.infoIndex === place.id && (
-              <InfoWindow onCloseClick={this.props.showInfo}>
-                <span>{place.name}</span>
-              </InfoWindow>
-            )}
-        </Marker>
-      );
-    });
+    return this.props.markers
+      ? this.props.markers.map(place => {
+          return (
+            <Marker
+              onClick={() => {
+                this.showInfo(place.id);
+              }}
+              key={place.id}
+              position={{
+                lat: place.location.lat,
+                lng: place.location.lng
+              }}
+            >
+              {this.state.isOpen &&
+                this.state.infoIndex === place.id && (
+                  <InfoWindow onCloseClick={this.props.showInfo}>
+                    <span>{place.name}</span>
+                  </InfoWindow>
+                )}
+            </Marker>
+          );
+        })
+      : null;
   }
 }
