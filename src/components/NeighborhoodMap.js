@@ -2,27 +2,67 @@ import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker
+  Marker,
+  InfoWindow
 } from 'react-google-maps';
-import React from 'react';
+import { GOOGLE_MAPS_API_KEY } from '../config';
+import React, { Component } from 'react';
 
-const NeighborhoodMap = withScriptjs(
-  withGoogleMap(props => (
-    <GoogleMap
-      defaultZoom={13}
-      defaultCenter={{ lat: 40.70313886114747, lng: -73.9981049029518 }}
-    >
-      {props.isMarkerShown &&
-        props.markers.map(place => {
-          return (
-            <Marker
-              key={place.id}
-              position={{ lat: place.location.lat, lng: place.location.lng }}
-            />
-          );
-        })}
-    </GoogleMap>
-  ))
-);
+class NeighborhoodMap extends Component {
+  state = {
+    isOpen: false,
+    infoIndex: null
+  };
+
+  showInfo = index =>
+    this.setState({
+      isOpen: this.state.infoIndex !== index || !this.state.isOpen,
+      infoIndex: index
+    });
+
+  render() {
+    const GOOGLE_MAPS_API_SCRIPT = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}`;
+    const Map = withScriptjs(
+      withGoogleMap(props => (
+        <GoogleMap
+          defaultZoom={13}
+          defaultCenter={{ lat: 40.70313886114747, lng: -73.9981049029518 }}
+        >
+          {this.props.isMarkerShown &&
+            this.props.markers.map(place => {
+              return (
+                <Marker
+                  onClick={() => {
+                    this.showInfo(place.id);
+                  }}
+                  key={place.id}
+                  position={{
+                    lat: place.location.lat,
+                    lng: place.location.lng
+                  }}
+                >
+                  {this.state.isOpen &&
+                    this.state.infoIndex === place.id && (
+                      <InfoWindow onCloseClick={props.showInfo}>
+                        <span>{place.name}</span>
+                      </InfoWindow>
+                    )}
+                </Marker>
+              );
+            })}
+        </GoogleMap>
+      ))
+    );
+
+    return (
+      <Map
+        googleMapURL={GOOGLE_MAPS_API_SCRIPT}
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={{ height: `500px` }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+      />
+    );
+  }
+}
 
 export default NeighborhoodMap;

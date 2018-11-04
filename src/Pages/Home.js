@@ -14,11 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import NeighborhoodMap from '../components/NeighborhoodMap';
-import {
-  GOOGLE_MAPS_API_KEY,
-  SQUARESPACE_CLIENT_ID,
-  SQUARESPACE_CLIENT_SECRET
-} from '../config';
+import { SQUARESPACE_CLIENT_ID, SQUARESPACE_CLIENT_SECRET } from '../config';
 
 const drawerWidth = 270;
 
@@ -77,7 +73,6 @@ class ResponsiveDrawer extends React.Component {
 
   render() {
     const { classes, theme } = this.props;
-    const GOOGLE_MAPS_API_SCRIPT = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}`;
 
     const drawer = (
       <div>
@@ -85,8 +80,8 @@ class ResponsiveDrawer extends React.Component {
         <Divider />
         <List>
           {this.state.places.map(place => (
-            <Fragment>
-              <ListItem button key={place.id}>
+            <Fragment key={place.id}>
+              <ListItem button>
                 <ListItemText primary={place.name} />
               </ListItem>
               <Divider />
@@ -147,14 +142,7 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <NeighborhoodMap
-            markers={this.state.places}
-            isMarkerShown
-            googleMapURL={GOOGLE_MAPS_API_SCRIPT}
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `500px` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-          />
+          <NeighborhoodMap markers={this.state.places} isMarkerShown />
         </main>
       </div>
     );
