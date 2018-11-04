@@ -17,6 +17,7 @@ import NeighborhoodMap from '../components/NeighborhoodMap';
 import { SQUARESPACE_CLIENT_ID, SQUARESPACE_CLIENT_SECRET } from '../config';
 import Markers from '../components/Markers';
 import TextField from '@material-ui/core/TextField';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const drawerWidth = 270;
 
@@ -72,6 +73,9 @@ class ResponsiveDrawer extends React.Component {
       .then(data => {
         this.setState({ places: data.response.venues });
         console.log(data.response.venues[0].location.lat, data.response.venues);
+      })
+      .catch(err => {
+        throw new Error('Error Loading places data!');
       });
   }
 
@@ -112,33 +116,39 @@ class ResponsiveDrawer extends React.Component {
         />
         <Divider />
         <List>
-          {this.state.searchQuery !== ''
-            ? this.state.filtered.map(place => (
-                <Fragment key={place.id}>
-                  <ListItem
-                    button
-                    onClick={() => {
-                      this.markers.getPlaceId(place.id);
-                    }}
-                  >
-                    <ListItemText primary={place.name} />
-                  </ListItem>
-                  <Divider />
-                </Fragment>
-              ))
-            : this.state.places.map(place => (
-                <Fragment key={place.id}>
-                  <ListItem
-                    button
-                    onClick={() => {
-                      this.markers.getPlaceId(place.id);
-                    }}
-                  >
-                    <ListItemText primary={place.name} />
-                  </ListItem>
-                  <Divider />
-                </Fragment>
-              ))}
+          {this.state.places !== undefined
+            ? this.state.searchQuery !== ''
+              ? this.state.filtered.length > 0
+                ? this.state.filtered.map(place => (
+                    <Fragment key={place.id}>
+                      <ListItem
+                        button
+                        onClick={() => {
+                          this.markers.getPlaceId(place.id);
+                        }}
+                      >
+                        <ListItemText primary={place.name} />
+                      </ListItem>
+                      <Divider />
+                    </Fragment>
+                  ))
+                : 'No place avaliable for above query!'
+              : this.state.places.length > 0
+                ? this.state.places.map(place => (
+                    <Fragment key={place.id}>
+                      <ListItem
+                        button
+                        onClick={() => {
+                          this.markers.getPlaceId(place.id);
+                        }}
+                      >
+                        <ListItemText primary={place.name} />
+                      </ListItem>
+                      <Divider />
+                    </Fragment>
+                  ))
+                : 'Loadding...'
+            : 'Error Loading Maps Data!'}
         </List>
       </div>
     );
@@ -194,18 +204,20 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <NeighborhoodMap isMarkerShown>
-            <Markers
-              markers={
-                this.state.searchQuery !== ''
-                  ? this.state.filtered
-                  : this.state.places
-              }
-              ref={instance => {
-                this.markers = instance;
-              }}
-            />
-          </NeighborhoodMap>
+          <ErrorBoundary>
+            <NeighborhoodMap isMarkerShown>
+              <Markers
+                markers={
+                  this.state.searchQuery !== ''
+                    ? this.state.filtered
+                    : this.state.places
+                }
+                ref={instance => {
+                  this.markers = instance;
+                }}
+              />
+            </NeighborhoodMap>
+          </ErrorBoundary>
         </main>
       </div>
     );
