@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
-
 export default class Markers extends Component {
   state = {
     isOpen: false,
@@ -26,6 +25,11 @@ export default class Markers extends Component {
       ? this.props.markers.map(place => {
           return (
             <Marker
+              icon={
+                this.state.infoIndex === place.id
+                  ? `data:image/svg+xml;utf-8, <svg width="50" height="50" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle fill="${100}" opacity="0.75" cx="50%" cy="70%" r="${35}"/></svg>`
+                  : null
+              }
               onClick={() => {
                 this.showInfo(place.id);
               }}

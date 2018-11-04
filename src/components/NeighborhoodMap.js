@@ -20,7 +20,7 @@ class NeighborhoodMap extends Component {
       withGoogleMap(props => (
         <GoogleMap
           role="application"
-          defaultZoom={13}
+          defaultZoom={15}
           defaultCenter={{ lat: 40.70313886114747, lng: -73.9981049029518 }}
         >
           {this.props.isMarkerShown && this.props.children}
