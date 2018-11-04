@@ -1,12 +1,7 @@
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-  InfoWindow
-} from 'react-google-maps';
+import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 import { GOOGLE_MAPS_API_KEY } from '../config';
 import React, { Component } from 'react';
+import Markers from './Markers';
 
 class NeighborhoodMap extends Component {
   state = {
@@ -28,28 +23,7 @@ class NeighborhoodMap extends Component {
           defaultZoom={13}
           defaultCenter={{ lat: 40.70313886114747, lng: -73.9981049029518 }}
         >
-          {this.props.isMarkerShown &&
-            this.props.markers.map(place => {
-              return (
-                <Marker
-                  onClick={() => {
-                    this.showInfo(place.id);
-                  }}
-                  key={place.id}
-                  position={{
-                    lat: place.location.lat,
-                    lng: place.location.lng
-                  }}
-                >
-                  {this.state.isOpen &&
-                    this.state.infoIndex === place.id && (
-                      <InfoWindow onCloseClick={props.showInfo}>
-                        <span>{place.name}</span>
-                      </InfoWindow>
-                    )}
-                </Marker>
-              );
-            })}
+          {this.props.isMarkerShown && <Markers markers={this.props.markers} />}
         </GoogleMap>
       ))
     );
