@@ -217,6 +217,7 @@ class ResponsiveDrawer extends React.Component {
                 }}
               />
             </NeighborhoodMap>
+            <p>Showing places information from foursquare api</p>
           </ErrorBoundary>
         </main>
       </div>
