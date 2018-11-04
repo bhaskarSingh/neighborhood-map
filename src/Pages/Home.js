@@ -149,7 +149,7 @@ class ResponsiveDrawer extends React.Component {
                     </Fragment>
                   ))
                 : 'Loadding...'
-            : 'Error Loading Maps Data!'}
+            : 'Error Loading Places Data!'}
         </List>
       </div>
     );
