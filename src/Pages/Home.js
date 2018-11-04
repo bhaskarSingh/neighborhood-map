@@ -16,6 +16,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import NeighborhoodMap from '../components/NeighborhoodMap';
 import { SQUARESPACE_CLIENT_ID, SQUARESPACE_CLIENT_SECRET } from '../config';
 import Markers from '../components/Markers';
+import TextField from '@material-ui/core/TextField';
+
 const drawerWidth = 270;
 
 const styles = theme => ({
@@ -53,7 +55,9 @@ const styles = theme => ({
 class ResponsiveDrawer extends React.Component {
   state = {
     mobileOpen: false,
-    places: []
+    places: [],
+    searchQuery: '',
+    filtered: []
   };
 
   handleDrawerToggle = () => {
@@ -71,6 +75,25 @@ class ResponsiveDrawer extends React.Component {
       });
   }
 
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value
+    });
+
+    const filtered = this.state.places.filter(place => {
+      return place.name
+        .toLowerCase()
+        .includes(event.target.value.toLowerCase());
+    });
+
+    this.setState({
+      filtered
+    });
+    // console.log(filtered);
+
+    // console.log(event.target.value)
+  };
+
   render() {
     const { classes, theme } = this.props;
 
@@ -78,20 +101,44 @@ class ResponsiveDrawer extends React.Component {
       <div>
         <div className={classes.toolbar} />
         <Divider />
+        <TextField
+          style={{ marginLeft: 10, width: 240 }}
+          id="standard-name"
+          placeholder="search..."
+          className={classes.textField}
+          value={this.state.searchQuery}
+          onChange={this.handleChange('searchQuery')}
+          margin="normal"
+        />
+        <Divider />
         <List>
-          {this.state.places.map(place => (
-            <Fragment key={place.id}>
-              <ListItem
-                button
-                onClick={() => {
-                  this.markers.getPlaceId(place.id);
-                }}
-              >
-                <ListItemText primary={place.name} />
-              </ListItem>
-              <Divider />
-            </Fragment>
-          ))}
+          {this.state.searchQuery !== ''
+            ? this.state.filtered.map(place => (
+                <Fragment key={place.id}>
+                  <ListItem
+                    button
+                    onClick={() => {
+                      this.markers.getPlaceId(place.id);
+                    }}
+                  >
+                    <ListItemText primary={place.name} />
+                  </ListItem>
+                  <Divider />
+                </Fragment>
+              ))
+            : this.state.places.map(place => (
+                <Fragment key={place.id}>
+                  <ListItem
+                    button
+                    onClick={() => {
+                      this.markers.getPlaceId(place.id);
+                    }}
+                  >
+                    <ListItemText primary={place.name} />
+                  </ListItem>
+                  <Divider />
+                </Fragment>
+              ))}
         </List>
       </div>
     );
@@ -149,7 +196,11 @@ class ResponsiveDrawer extends React.Component {
           <div className={classes.toolbar} />
           <NeighborhoodMap isMarkerShown>
             <Markers
-              markers={this.state.places}
+              markers={
+                this.state.searchQuery !== ''
+                  ? this.state.filtered
+                  : this.state.places
+              }
               ref={instance => {
                 this.markers = instance;
               }}
