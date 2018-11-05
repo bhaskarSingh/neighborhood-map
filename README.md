@@ -9,6 +9,7 @@ It is a single page app uses React, Google maps, Foursquare. This project was bu
 
 ## Technologies & Packages:
 * [Reactjs:](https://reactjs.org) A JavaScript library for building user interfaces.
+* [Material UI](https://material-ui.com/) React components library that implement Google's Material Design.
 * [FourSquare APIs](https://developer.foursquare.com/). a local search-and-discovery service mobile app which provides search results for its users.
 * [Google Maps JavaScript API:](https://developers.google.com/maps/documentation/javascript/tutorial) It lets you customize maps with your own content and imagery for display on web pages and mobile devices.
 
