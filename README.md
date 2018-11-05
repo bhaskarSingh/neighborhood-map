@@ -34,6 +34,4 @@ It is a single page app uses React, Google maps, Foursquare. This project was bu
 	`serve -s build`
 * Then the App should run on [port 5000](http://localhost:5000).
 
-Note: while checking if square api url is correct or not use produaction build cause I have used Error Boundaries to show error
-
-Note: To check if service is working correcting or not, run production build
+Note: To check if service worker is working correcting or not, run production build
